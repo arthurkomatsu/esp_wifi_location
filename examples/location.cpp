@@ -17,6 +17,7 @@ void setup()
         Serial.println("Connected, getting location...");
         double lat, lng, acc;
         location.setGoogleKey(LOCATION_GOOGLE_KEY);
+        // location.setClient(client); You can change the client if you wish (should be a secure client)
         if (location.getLocation(lat, lng, acc) == true)
                 Serial.printf("Location success: %.6f, %.6f (%.2fm)\n", lat, lng, acc);
         else
