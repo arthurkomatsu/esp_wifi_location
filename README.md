@@ -1,5 +1,5 @@
 # ESP WiFi Location
-An Arduino ESP8266-ESP32 library to get geolocation using Google's API from nearby WiFi's stations.
+An Arduino ESP8266 library to get geolocation using Google's API from nearby WiFi's stations.
 
 ## How does it work?
 Google offers a [Geolocation API](https://developers.google.com/maps/documentation/geolocation/overview) service which returns an estimated location (latitude, longitude and accuracy) based on nearby Wifi stations. Each Wifi station has an unique MAC address associated with it. Since Wifi stations usually doesn't move much, Google can *almost* always get the estimated location right. If you wish to use the service, you must get an [Google API key](https://developers.google.com/maps/documentation/geolocation/get-api-key). Take a look at request limitations, you may have to pay to get more requests.
