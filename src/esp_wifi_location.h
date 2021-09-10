@@ -1,8 +1,10 @@
-#ifndef ESP_WIFI_LOCATION_H
-#define ESP_WIFI_LOCATION_H
+#pragma once
 
 #include <Arduino.h>
+#ifdef ESP8266
 #include <ESP8266WiFi.h>
+#endif
+#include <WiFiClientSecure.h>
 #include <ArduinoHttpClient.h>
 #include <ArduinoJson.h>
 
@@ -22,6 +24,7 @@ static const char google_fingerprint[] = "EF 23 EB 97 6E 70 8E CA 5C B7 6F A6 "
 class esp_wifi_location
 {
 public:
+	esp_wifi_location(String google_key);
         bool getLocation(double &lat, double &lng, double &acc);
         void setMaxWifisToScan(uint8_t max_wifis_scan);
         void setGoogleKey(String google_key);
@@ -37,5 +40,3 @@ private:
         Client *client = NULL;
         uint8_t max_wifis_scan = 10;
 };
-
-#endif

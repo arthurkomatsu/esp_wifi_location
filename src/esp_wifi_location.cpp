@@ -1,6 +1,11 @@
 #include "esp_wifi_location.h"
 
 // ----------------------------- PUBLIC FUNCTIONS ------------------------------
+esp_wifi_location::esp_wifi_location(String google_key)
+{
+	this->google_key = google_key;
+}
+
 bool esp_wifi_location::getLocation(double &lat, double &lng, double &acc)
 {
         debugLoc("Begin");
@@ -50,8 +55,10 @@ bool esp_wifi_location::postToGoogle(DynamicJsonDocument &json, String payload,
         if (use_client == NULL) {
                 debugLoc("No client specified, using WiFiSecure");
                 use_client = (Client *) &this->wifi_client_secure;
+#ifdef ESP8266
                 wifi_client_secure.setFingerprint(google_fingerprint);
                 wifi_client_secure.setBufferSizes(512, 512);
+#endif
         }
 
         HttpClient http(*use_client, google_server, google_port);
@@ -91,14 +98,14 @@ bool esp_wifi_location::postToGoogle(DynamicJsonDocument &json, String payload,
 		return false;
 	}
 
-        acc = json["accuracy"]        | 0.0;
-        lat = json["location"]["lat"] | 0.0;
-        lng = json["location"]["lng"] | 0.0;
+        acc = json["accuracy"]        | 1000000;
+        lat = json["location"]["lat"] | 1000000;
+        lng = json["location"]["lng"] | 1000000;
 
         //Disconnecting from the server
         http.stop();
         debugLoc("(lat, lng) = (%.8f, %.8f), acc = %.2fm", lat, lng, acc);
-        return lat != 0.0 && lng != 0.0 && acc != 0.0;
+        return lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180 && acc < 1000000;
 }
 
 String esp_wifi_location::scan_wifis(DynamicJsonDocument &json)
